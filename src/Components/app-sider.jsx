@@ -52,7 +52,7 @@ const data = {
     },
     {
       title: "Weather Prediction",
-      url: "#",
+      url: "/WeatherPrediction",
       icon: IconListDetails,
     },
     {

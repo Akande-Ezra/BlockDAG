@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import HealthPredictionForm from "./Components/HealthPredictionForm";
 import AppLayout from "./Pages/AppLayout";
 import HomePage from "./Pages/HomePage";
+import WeatherPrediction from "./Pages/WeatherPrediction";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <Route element={<AppLayout />}>
         <Route path="dashboard" element={<HomePage />} />
         <Route path="HealthPrediction" element={<HealthPredictionForm />} />
+        <Route path="WeatherPrediction" element={<WeatherPrediction />} />
       </Route>
     </Routes>
   );

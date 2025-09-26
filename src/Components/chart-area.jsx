@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import React, { useEffect, useState } from "react";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { useIsMobile } from "@/hooks/use-mobile"
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Card,
   CardAction,
@@ -9,27 +9,24 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
+} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
+// ✅ Your dataset preserved
 const chartData = [
-    //
-    { date: "2025-06-02", desktop: 470, mobile: 410 },
+  { date: "2025-06-02", desktop: 470, mobile: 410 },
   { date: "2025-06-03", desktop: 103, mobile: 160 },
   { date: "2025-06-04", desktop: 439, mobile: 380 },
   { date: "2025-06-05", desktop: 88, mobile: 140 },
@@ -58,7 +55,6 @@ const chartData = [
   { date: "2025-06-28", desktop: 149, mobile: 200 },
   { date: "2025-06-29", desktop: 103, mobile: 160 },
   { date: "2025-06-30", desktop: 446, mobile: 400 },
-    //
   { date: "2025-07-25", desktop: 222, mobile: 150 },
   { date: "2025-07-26", desktop: 97, mobile: 180 },
   { date: "2025-07-27", desktop: 167, mobile: 120 },
@@ -125,41 +121,43 @@ const chartData = [
   { date: "2025-09-29", desktop: 78, mobile: 130 },
   { date: "2025-09-30", desktop: 340, mobile: 280 },
   { date: "2025-09-31", desktop: 178, mobile: 230 },
-]
+];
 
 const chartConfig = {
   visitors: { label: "Visitors" },
-  desktop: { label: "Desktop", color: "var(--primary)" },
-  mobile: { label: "Mobile", color: "var(--primary)" },
-}
+  desktop: { label: "Desktop", color: "#6366F1" }, // indigo
+  mobile: { label: "Mobile", color: "#8B5CF6" }, // purple
+};
 
 export function ChartAreaInteractive() {
-  const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = useState("90d")
+  const isMobile = useIsMobile();
+  const [timeRange, setTimeRange] = useState("90d");
 
   useEffect(() => {
     if (isMobile) {
-      setTimeRange("7d")
+      setTimeRange("7d");
     }
-  }, [isMobile])
+  }, [isMobile]);
 
   const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date)
-    const referenceDate = new Date("2025-06-30")
-    let daysToSubtract = 90
-    if (timeRange === "30d") daysToSubtract = 30
-    else if (timeRange === "7d") daysToSubtract = 7
+    const date = new Date(item.date);
+    const referenceDate = new Date("2025-09-31"); // ✅ latest date
+    let daysToSubtract = 90;
+    if (timeRange === "30d") daysToSubtract = 30;
+    else if (timeRange === "7d") daysToSubtract = 7;
 
-    const startDate = new Date(referenceDate)
-    startDate.setDate(startDate.getDate() - daysToSubtract)
-    return date >= startDate
-  })
+    const startDate = new Date(referenceDate);
+    startDate.setDate(startDate.getDate() - daysToSubtract);
+    return date >= startDate;
+  });
 
   return (
-    <Card className="@container/card">
+    <Card className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-indigo-50 shadow-md shadow-indigo-100">
       <CardHeader>
-        <CardTitle>Total Users</CardTitle>
-        <CardDescription>
+        <CardTitle className="font-semibold text-slate-800">
+          Total Users
+        </CardTitle>
+        <CardDescription className="text-slate-500">
           <span className="hidden @[540px]/card:block">
             Total for the last 3 months
           </span>
@@ -179,13 +177,13 @@ export function ChartAreaInteractive() {
           </ToggleGroup>
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger
-              className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
+              className="flex w-40 rounded-xl border-slate-200 bg-white shadow-sm hover:shadow-md @[767px]/card:hidden"
               size="sm"
               aria-label="Select a value"
             >
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
+            <SelectContent className="rounded-xl shadow-lg">
               <SelectItem value="90d" className="rounded-lg">
                 Last 3 months
               </SelectItem>
@@ -207,15 +205,19 @@ export function ChartAreaInteractive() {
           <AreaChart data={filteredData}>
             <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-desktop)" stopOpacity={1.0} />
-                <stop offset="95%" stopColor="var(--color-desktop)" stopOpacity={0.1} />
+                <stop offset="5%" stopColor="#6366F1" stopOpacity={0.9} />
+                <stop offset="95%" stopColor="#6366F1" stopOpacity={0.05} />
               </linearGradient>
               <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-mobile)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-mobile)" stopOpacity={0.1} />
+                <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0.05} />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} />
+            <CartesianGrid
+              vertical={false}
+              strokeDasharray="3 3"
+              stroke="#E5E7EB"
+            />
             <XAxis
               dataKey="date"
               tickLine={false}
@@ -223,11 +225,11 @@ export function ChartAreaInteractive() {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = new Date(value)
+                const date = new Date(value);
                 return date.toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
-                })
+                });
               }}
             />
             <ChartTooltip
@@ -241,6 +243,7 @@ export function ChartAreaInteractive() {
                     })
                   }
                   indicator="dot"
+                  className="rounded-lg border border-slate-200 bg-white/80 shadow-md backdrop-blur-sm"
                 />
               }
             />
@@ -248,19 +251,21 @@ export function ChartAreaInteractive() {
               dataKey="mobile"
               type="natural"
               fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
+              stroke="#8B5CF6"
+              strokeWidth={2}
               stackId="a"
             />
             <Area
               dataKey="desktop"
               type="natural"
               fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
+              stroke="#6366F1"
+              strokeWidth={2}
               stackId="a"
             />
           </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

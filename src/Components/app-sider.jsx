@@ -61,8 +61,8 @@ const data = {
       icon: IconChartBar,
     },
     {
-      title: "Earnings",
-      url: "/Earnings",
+      title: "Health Blog",
+      url: "/HealthBlog",
       icon: IconChartBar,
     },
     {

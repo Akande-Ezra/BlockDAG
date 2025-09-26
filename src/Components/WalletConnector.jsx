@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Wallet, Shield, CheckCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function WalletConnector({ 
   onConnect, 
@@ -21,14 +22,17 @@ export default function WalletConnector({
     }, 2000);
   };
 
-  const handleSign = async () => {
-    setIsSigning(true);
-    // Simulate signature process
-    setTimeout(() => {
-      onSign();
-      setIsSigning(false);
-    }, 3000);
-  };
+  // const handleSign = async () => {
+  //   setIsSigning(true);
+  //   // Simulate signature process
+  //   setTimeout(() => {
+  //     onSign();
+  //     setIsSigning(false);
+  //   }, 3000);
+  // };
+  // function handleSign(params) {
+    const navigate = useNavigate('/dashboard');
+  // }  
 
   if (!isConnected) {
     return (
@@ -78,7 +82,7 @@ export default function WalletConnector({
             Address: {address?.slice(0, 6)}...{address?.slice(-4)}
           </p>
           <button
-            onClick={handleSign}
+            onClick={() => navigate('/dashboard')}
             disabled={isSigning}
             className="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:from-amber-600 hover:to-orange-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 mx-auto"
           >

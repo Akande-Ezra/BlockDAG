@@ -1,145 +1,157 @@
 import React, { useState } from 'react';
-import { Brain, Plus, X, Zap } from 'lucide-react';
+import { Brain, Shield } from 'lucide-react';
+import PredictionResult from '@/Components/PredictionResult';
+import PredictionHistory from '@/components/PredictionHistory';
+import PaymentModal from '@/components/PayementModal';
+import HealthForm from  '@/Components/HealthForm'
 
-const COMMON_SYMPTOMS = [
-  'Headache',
-  'Fatigue',
-  'Nausea',
-  'Fever',
-  'Cough',
-  'Shortness of breath',
-  'Chest pain',
-  'Back pain',
-  'Joint pain',
-  'Dizziness',
-  'Sleep issues',
-  'Anxiety'
-];
+function App() {
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [isProcessingPrediction, setIsProcessingPrediction] = useState(false);
+  const [currentPrediction, setCurrentPrediction] = useState(null);
+  const [predictionHistory, setPredictionHistory] = useState([]);
+  const [activeTab, setActiveTab] = useState('predict');
+  const [tokens, setTokens] = useState(100); // optional token system
 
-export default function HealthPredictionForm({ onPredict, isProcessing }) {
-  const [symptoms, setSymptoms] = useState([]);
-  const [customSymptom, setCustomSymptom] = useState('');
-
-  const addSymptom = (symptom) => {
-    if (!symptoms.includes(symptom)) {
-      setSymptoms([...symptoms, symptom]);
-    }
+  const handlePayment = (amount) => {
+    setTokens(prev => prev + amount);
+    setShowPaymentModal(false);
   };
 
-  const removeSymptom = (symptom) => {
-    setSymptoms(symptoms.filter(s => s !== symptom));
-  };
+  const handlePredict = async (symptoms) => {
+    const predictionCost = 50;
 
-  const addCustomSymptom = () => {
-    if (customSymptom.trim() && !symptoms.includes(customSymptom.trim())) {
-      addSymptom(customSymptom.trim());
-      setCustomSymptom('');
+    if (tokens < predictionCost) {
+      setShowPaymentModal(true);
+      return;
     }
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (symptoms.length > 0) {
-      onPredict(symptoms);
-    }
+    setIsProcessingPrediction(true);
+    setCurrentPrediction(null);
+
+    // Simulate AI prediction
+    setTimeout(() => {
+      const newPrediction = {
+        id: Date.now().toString(),
+        symptoms,
+        prediction: {
+          possibleCauses: [
+            'Stress-related tension and lifestyle factors',
+            'Possible viral infection or immune system response',
+            'Sleep deprivation or circadian rhythm disruption',
+            'Dehydration or nutritional deficiency'
+          ],
+          recommendations: [
+            'Consult with a healthcare professional for proper diagnosis',
+            'Maintain regular sleep schedule (7-9 hours per night)',
+            'Stay hydrated and maintain balanced nutrition',
+            'Consider stress management techniques like meditation',
+            'Monitor symptoms and seek immediate care if they worsen'
+          ],
+          severity: symptoms.length > 4 ? 'high' : symptoms.length > 2 ? 'medium' : 'low',
+          confidence: Math.floor(Math.random() * 20) + 75 // 75-95%
+        },
+        timestamp: new Date(),
+        cost: predictionCost
+      };
+
+      setTokens(prev => prev - predictionCost);
+      setCurrentPrediction(newPrediction);
+      setPredictionHistory(prev => [newPrediction, ...prev]);
+      setIsProcessingPrediction(false);
+    }, 4000);
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-gray-200">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
-          <Brain className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">Health Prediction Analysis</h3>
-          <p className="text-sm text-gray-600">Describe your symptoms for AI-powered insights</p>
-        </div>
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        {/* Selected Symptoms */}
-        {symptoms.length > 0 && (
-          <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Selected Symptoms:</h4>
-            <div className="flex flex-wrap gap-2">
-              {symptoms.map((symptom) => (
-                <span
-                  key={symptom}
-                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1"
-                >
-                  {symptom}
-                  <button
-                    type="button"
-                    onClick={() => removeSymptom(symptom)}
-                    className="hover:bg-blue-200 rounded-full p-0.5"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* Header */}
+      <header className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+            <Brain className="w-6 h-6 text-white" />
           </div>
-        )}
-
-        {/* Common Symptoms */}
-        <div className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 mb-3">Common Symptoms:</h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {COMMON_SYMPTOMS.map((symptom) => (
-              <button
-                key={symptom}
-                type="button"
-                onClick={() => addSymptom(symptom)}
-                disabled={symptoms.includes(symptom)}
-                className="text-left px-3 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors disabled:bg-gray-50 disabled:text-gray-400 disabled:border-gray-200"
-              >
-                {symptom}
-              </button>
-            ))}
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">HealthPredict</h1>
+            <p className="text-sm text-gray-600">AI-Powered Health Insights</p>
           </div>
         </div>
+      </header>
 
-        {/* Custom Symptom Input */}
-        <div className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 mb-2">Add Custom Symptom:</h4>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={customSymptom}
-              onChange={(e) => setCustomSymptom(e.target.value)}
-              placeholder="Enter a specific symptom..."
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCustomSymptom())}
-            />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Navigation Tabs */}
+        <div className="flex items-center justify-center">
+          <div className="bg-white rounded-xl p-1 border border-gray-200">
             <button
-              type="button"
-              onClick={addCustomSymptom}
-              className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
+              onClick={() => setActiveTab('predict')}
+              className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 ${
+                activeTab === 'predict'
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
             >
-              <Plus className="w-4 h-4" />
+              New Prediction
+            </button>
+            <button
+              onClick={() => setActiveTab('history')}
+              className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 ${
+                activeTab === 'history'
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              History
             </button>
           </div>
         </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={symptoms.length === 0 || isProcessing}
-          className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 rounded-lg font-medium hover:from-purple-600 hover:to-pink-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-        >
-          {isProcessing ? (
-            <>
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              Analyzing...
-            </>
-          ) : (
-            <>
-              <Zap className="w-4 h-4" />
-              Get AI Prediction (50 tokens)
-            </>
-          )}
-        </button>
-      </form>
+        {activeTab === 'predict' ? (
+          <div className="grid lg:grid-cols-2 gap-8">
+            <HealthForm
+              onPredict={handlePredict}
+              isProcessing={isProcessingPrediction}
+            />
+
+            <div>
+              {isProcessingPrediction && (
+                <div className="bg-white rounded-xl p-8 border border-gray-200 text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Brain className="w-8 h-8 text-white animate-pulse" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Analyzing Symptoms</h3>
+                  <p className="text-gray-600 mb-4">AI is processing your health data...</p>
+                  <div className="w-48 h-2 bg-gray-200 rounded-full mx-auto">
+                    <div className="h-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full animate-pulse w-full" />
+                  </div>
+                </div>
+              )}
+
+              {currentPrediction && !isProcessingPrediction && (
+                <PredictionResult prediction={currentPrediction} />
+              )}
+
+              {!currentPrediction && !isProcessingPrediction && (
+                <div className="bg-white rounded-xl p-8 border border-gray-200 text-center">
+                  <Shield className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Ready for Analysis</h3>
+                  <p className="text-gray-600">Select your symptoms to get started with AI health prediction.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <PredictionHistory predictions={predictionHistory} />
+        )}
+      </main>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        onPayment={handlePayment}
+        cost={100}
+      />
     </div>
   );
 }
+
+export default App;

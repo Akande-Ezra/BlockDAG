@@ -57,17 +57,22 @@ const data = {
     },
     {
       title: "Trending Now",
-      url: "#",
+      url: "/Trending",
+      icon: IconChartBar,
+    },
+    {
+      title: "Earnings",
+      url: "/Earnings",
       icon: IconChartBar,
     },
     {
       title: "Wallet",
-      url: "#",
+      url: "/Wallet",
       icon: IconFolder,
     },
     {
       title: "History",
-      url: "#",
+      url: "/History",
       icon: IconUsers,
     },
   ],

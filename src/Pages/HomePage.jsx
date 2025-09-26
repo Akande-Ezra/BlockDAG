@@ -19,7 +19,6 @@ export default function HomePage() {
               <ChartAreaInteractive />
             </div>
             <WhatWeOffer />
-            {/* <DataTable data={data} /> */}
           </div>
         </div>
       </div>

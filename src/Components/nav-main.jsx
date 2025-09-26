@@ -1,50 +1,53 @@
-import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react"
-
-import { Button } from "@/components/ui/button"
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { useNavigate } from "react-router-dom"
+} from "@/components/ui/sidebar";
 
 export function NavMain({ items }) {
-    const navigate = useNavigate('')
+  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
-            <SidebarMenuButton
-              tooltip="Quick Create"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
-            >
-              {/* <IconCirclePlusFilled /> */}
-              <span>Dashboard</span>
-            </SidebarMenuButton>
-            {/* <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-            >
-              <IconMail />
-              <span className="sr-only">Inbox</span>
-            </Button> */}
-          </SidebarMenuItem>
-        </SidebarMenu>
-        <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title} >
-              <SidebarMenuButton tooltip={item.title} className={"justify-start cursor-pointer"} onClick={() => navigate(item.url)}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {items.map((item) => {
+            const isActive = location.pathname === item.url;
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  className={`justify-start cursor-pointer transition-colors duration-200 ${
+                    isActive
+                      ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md"
+                      : "hover:bg-slate-100"
+                  }`}
+                  onClick={() => navigate(item.url)}
+                >
+                  {item.icon && (
+                    <item.icon
+                      className={`${
+                        isActive ? "text-white" : "text-slate-600"
+                      }`}
+                    />
+                  )}
+                  <span
+                    className={`ml-2 ${
+                      isActive ? "font-medium text-white" : "text-slate-700"
+                    }`}
+                  >
+                    {item.title}
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  )
+  );
 }

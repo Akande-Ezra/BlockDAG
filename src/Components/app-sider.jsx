@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   IconCamera,
   IconChartBar,
@@ -17,12 +17,12 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
-} from "@tabler/icons-react"
+} from "@tabler/icons-react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -31,7 +31,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const data = {
   user: {
@@ -41,8 +41,13 @@ const data = {
   },
   navMain: [
     {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: IconDashboard,
+    },
+    {
       title: "Health Prediction",
-      url: "/dashboard/HealthPrediction",
+      url: "/HealthPrediction",
       icon: IconDashboard,
     },
     {
@@ -101,14 +106,17 @@ const data = {
     //   icon: IconFileWord,
     // },
   ],
-}
+};
 
 export function AppSidebar({ ...props }) {
   return (
-    <Sidebar collapsible="offcanvas" {...props} className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"
->
+    <Sidebar
+      collapsible="offcanvas"
+      {...props}
+      className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"
+    >
       <SidebarHeader>
-        <SidebarMenu >
+        <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
@@ -131,5 +139,5 @@ export function AppSidebar({ ...props }) {
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

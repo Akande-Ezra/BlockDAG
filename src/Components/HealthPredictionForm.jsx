@@ -2,69 +2,51 @@ import React, { useState } from "react";
 import { Brain, Shield } from "lucide-react";
 import PredictionResult from "@/Components/PredictionResult";
 import PredictionHistory from "@/Components/PredictionHistory";
-import PaymentModal from "@/Components/PayementModal";
-import HealthForm from "@/Components/HealthForm";
+import SmartContractPredictionForm from "@/Components/SmartContractPredictionForm";
 
 function App() {
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [isProcessingPrediction, setIsProcessingPrediction] = useState(false);
   const [currentPrediction, setCurrentPrediction] = useState(null);
   const [predictionHistory, setPredictionHistory] = useState([]);
   const [activeTab, setActiveTab] = useState("predict");
-  const [tokens, setTokens] = useState(100); // optional token system
 
-  const handlePayment = (amount) => {
-    setTokens((prev) => prev + amount);
-    setShowPaymentModal(false);
-  };
 
-  const handlePredict = async (symptoms) => {
-    const predictionCost = 50;
-
-    if (tokens < predictionCost) {
-      setShowPaymentModal(true);
-      return;
-    }
-
+  const handlePredictionStart = () => {
     setIsProcessingPrediction(true);
     setCurrentPrediction(null);
+  };
 
-    // Simulate AI prediction
+  const handlePredictionComplete = () => {
+    // Simulate AI processing after blockchain transaction
     setTimeout(() => {
       const newPrediction = {
         id: Date.now().toString(),
-        symptoms,
+        symptoms: ["Blockchain Transaction Completed"],
         prediction: {
           possibleCauses: [
-            "Stress-related tension and lifestyle factors",
-            "Possible viral infection or immune system response",
-            "Sleep deprivation or circadian rhythm disruption",
-            "Dehydration or nutritional deficiency",
+            "Smart contract executed successfully",
+            "Token payment processed on blockchain",
+            "AI analysis request submitted to decentralized network",
+            "Prediction data stored on distributed ledger",
           ],
           recommendations: [
-            "Consult with a healthcare professional for proper diagnosis",
-            "Maintain regular sleep schedule (7-9 hours per night)",
-            "Stay hydrated and maintain balanced nutrition",
-            "Consider stress management techniques like meditation",
-            "Monitor symptoms and seek immediate care if they worsen",
+            "Transaction confirmed on blockchain",
+            "AI analysis will be processed by decentralized oracle",
+            "Results will be stored securely on IPFS",
+            "Monitor transaction hash for completion status",
+            "Check blockchain explorer for transaction details",
           ],
-          severity:
-            symptoms.length > 4
-              ? "high"
-              : symptoms.length > 2
-              ? "medium"
-              : "low",
-          confidence: Math.floor(Math.random() * 20) + 75, // 75-95%
+          severity: "low",
+          confidence: 95,
         },
         timestamp: new Date(),
-        cost: predictionCost,
+        cost: 50,
       };
 
-      setTokens((prev) => prev - predictionCost);
       setCurrentPrediction(newPrediction);
       setPredictionHistory((prev) => [newPrediction, ...prev]);
       setIsProcessingPrediction(false);
-    }, 4000);
+    }, 3000);
   };
 
   return (
@@ -111,9 +93,9 @@ function App() {
 
         {activeTab === "predict" ? (
           <div className="grid lg:grid-cols-2 gap-8">
-            <HealthForm
-              onPredict={handlePredict}
-              isProcessing={isProcessingPrediction}
+            <SmartContractPredictionForm
+              onPredictionStart={handlePredictionStart}
+              onPredictionComplete={handlePredictionComplete}
             />
 
             <div>
@@ -157,13 +139,6 @@ function App() {
         )}
       </main>
 
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onPayment={handlePayment}
-        cost={100}
-      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Activity, Wallet, Brain, Shield, Sparkles } from 'lucide-react';
 import WalletConnector from '@/Components/WalletConnector';
 import TokenBalance from '@/Components/TokenBalance';
@@ -8,6 +8,8 @@ import PredictionResult from '@/Components/PredictionResult';
 import PredictionHistory from '@/Components/PredictionHistory';
 import { createUser } from '@/types';
 import HealthPredictionForm from '@/Components/HealthPredictionForm';
+import { useAccount } from 'wagmi';
+import { useNavigate } from 'react-router-dom';
 
 function StartScreen() {
   const [user, setUser] = useState(createUser());
@@ -17,18 +19,29 @@ function StartScreen() {
   const [predictionHistory, setPredictionHistory] = useState([]);
   const [activeTab, setActiveTab] = useState('predict');
 
-  const handleWalletConnect = (address) => {
-    setUser(prev => ({ ...prev, address, isAuthenticated: false }));
-  };
+  // RainbowKit wallet connection monitoring
+  const { address: walletAddress, isConnected: walletConnected } = useAccount();
+  const navigate = useNavigate();
 
-  const handleSign = () => {
-    setUser(prev => ({ 
-      ...prev, 
-      isAuthenticated: true, 
-      tokens: 100, // Welcome bonus
-      signupReward: true 
-    }));
-  };
+  // Automatically navigate to dashboard when wallet connects
+  useEffect(() => {
+    if (walletConnected && walletAddress) {
+      navigate('/dashboard');
+    }
+  }, [walletConnected, walletAddress, navigate]);
+
+  // Update user state when wallet connects via RainbowKit
+  useEffect(() => {
+    if (walletConnected && walletAddress) {
+      setUser(prev => ({
+        ...prev,
+        address: walletAddress,
+        isAuthenticated: true,
+        tokens: 100, // Welcome bonus
+        signupReward: true
+      }));
+    }
+  }, [walletConnected, walletAddress]);
 
   const handlePayment = (amount) => {
     setUser(prev => ({ ...prev, tokens: prev.tokens + amount }));
@@ -79,7 +92,7 @@ function StartScreen() {
     }, 4000);
   };
 
-  const isConnected = !!user.address;
+  const isConnected = walletConnected;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -97,11 +110,20 @@ function StartScreen() {
               </div>
             </div>
 
-            {user.isAuthenticated && (
-              <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
+              {user.isAuthenticated && (
                 <TokenBalance tokens={user.tokens} hasSignupReward={user.signupReward} />
-              </div>
-            )}
+              )}
+
+              {user.address && (
+                <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+                  <Wallet className="w-4 h-4 text-green-600" />
+                  <span className="text-sm font-medium text-green-800">
+                    {user.address.slice(0, 6)}...{user.address.slice(-4)}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -141,13 +163,7 @@ function StartScreen() {
               </div>
             </div>
 
-            <WalletConnector
-              onConnect={handleWalletConnect}
-              onSign={handleSign}
-              isConnected={isConnected}
-              isAuthenticated={user.isAuthenticated}
-              address={user.address}
-            />
+            <WalletConnector />
           </div>
         ) : (
           <div className="space-y-8">

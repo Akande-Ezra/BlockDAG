@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/Components/app-sider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/Components/ui/sidebar";
 import { Outlet } from "react-router-dom";
 import { Brain } from "lucide-react";
 

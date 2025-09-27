@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Activity, Wallet, Brain, Shield, Sparkles } from 'lucide-react';
-import WalletConnector from '@/components/WalletConnector';
-import TokenBalance from '@/components/TokenBalance';
-import PaymentModal from '@/components/PayementModal';
+import WalletConnector from '@/Components/WalletConnector';
+import TokenBalance from '@/Components/TokenBalance';
+import PaymentModal from '@/Components/PayementModal';
 // import HealthPredictionForm from './components/HealthPredictionForm';
-import PredictionResult from '@/components/PredictionResult';
-import PredictionHistory from '@/components/PredictionHistory';
+import PredictionResult from '@/Components/PredictionResult';
+import PredictionHistory from '@/Components/PredictionHistory';
 import { createUser } from '@/types';
 import HealthPredictionForm from '@/Components/HealthPredictionForm';
 

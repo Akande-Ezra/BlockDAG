@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Wallet, Shield, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ConnectWallet } from './ui/connectWallet';
 
 export default function WalletConnector({ 
   onConnect, 
@@ -58,7 +59,7 @@ export default function WalletConnector({
             ) : (
               <>
                 <Wallet className="w-4 h-4" />
-                Connect Wallet
+                <ConnectWallet />
               </>
             )}
           </button>

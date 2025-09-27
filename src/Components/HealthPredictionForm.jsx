@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Brain, Shield } from "lucide-react";
 import PredictionResult from "@/Components/PredictionResult";
-import PredictionHistory from "@/components/PredictionHistory";
-import PaymentModal from "@/components/PayementModal";
+import PredictionHistory from "@/Components/PredictionHistory";
+import PaymentModal from "@/Components/PayementModal";
 import HealthForm from "@/Components/HealthForm";
 
 function App() {

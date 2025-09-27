@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Activity, Wallet, Brain, Shield, Sparkles } from 'lucide-react';
-import WalletConnector from '@/components/WalletConnector';
+import ConnectWalletButton from '@/components/WalletConnector';
 import TokenBalance from '@/components/TokenBalance';
 import PaymentModal from '@/components/PayementModal';
 // import HealthPredictionForm from './components/HealthPredictionForm';
@@ -19,18 +19,18 @@ function StartScreen() {
   const [predictionHistory, setPredictionHistory] = useState([]);
   const [activeTab, setActiveTab] = useState('predict');
 
-  const handleWalletConnect = (address) => {
-    setUser(prev => ({ ...prev, address, isAuthenticated: false }));
-  };
+  // const handleWalletConnect = (address) => {
+  //   setUser(prev => ({ ...prev, address, isAuthenticated: false }));
+  // };
 
-  const handleSign = () => {
-    setUser(prev => ({ 
-      ...prev, 
-      isAuthenticated: true, 
-      tokens: 100, // Welcome bonus
-      signupReward: true 
-    }));
-  };
+  // const handleSign = () => {
+  //   setUser(prev => ({ 
+  //     ...prev, 
+  //     isAuthenticated: true, 
+  //     tokens: 100, // Welcome bonus
+  //     signupReward: true 
+  //   }));
+  // };
 
   const handlePayment = (amount) => {
     setUser(prev => ({ ...prev, tokens: prev.tokens + amount }));
@@ -81,7 +81,7 @@ function StartScreen() {
     }, 4000);
   };
 
-  const isConnected = !!user.address;
+  // const isConnected = !!user.address;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -143,12 +143,8 @@ function StartScreen() {
               </div>
             </div>
 
-            <WalletConnector
-              // onConnect={handleWalletConnect}
-              // onSign={handleSign}
-              // isConnected={isConnected}
-              // isAuthenticated={user.isAuthenticated}
-              // address={user.address}
+            <ConnectWalletButton
+n
             />
           </div>
         ) : (

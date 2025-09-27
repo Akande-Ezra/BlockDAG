@@ -9,6 +9,8 @@ import PredictionHistory from '@/components/PredictionHistory';
 import { createUser } from '@/types';
 import HealthPredictionForm from '@/Components/HealthPredictionForm';
 
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+
 function StartScreen() {
   const [user, setUser] = useState(createUser());
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -142,11 +144,11 @@ function StartScreen() {
             </div>
 
             <WalletConnector
-              onConnect={handleWalletConnect}
-              onSign={handleSign}
-              isConnected={isConnected}
-              isAuthenticated={user.isAuthenticated}
-              address={user.address}
+              // onConnect={handleWalletConnect}
+              // onSign={handleSign}
+              // isConnected={isConnected}
+              // isAuthenticated={user.isAuthenticated}
+              // address={user.address}
             />
           </div>
         ) : (

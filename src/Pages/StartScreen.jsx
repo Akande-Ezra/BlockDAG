@@ -106,7 +106,7 @@ function StartScreen() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Health Predict</h1>
-                <p className="text-sm text-gray-600">AI-Powered Health Insights by Kehinde</p>
+                <p className="text-sm text-gray-600">AI-Powered Health Insights</p>
               </div>
             </div>
 
